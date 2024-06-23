@@ -14,6 +14,11 @@ import gensim.models
 
 from infoverse_corpus import InfvCorpus
 
+
+# pip install gensim
+# pip install scipy==1.10.1
+# pip install pandas
+
 #==============================================================================
 # package's constants
 #------------------------------------------------------------------------------
@@ -32,7 +37,11 @@ if __name__ =='__main__':
     journal.I('Main start')
 
     sentences = InfvCorpus(journal, 'InfoVerse')
-    model = gensim.models.Word2Vec(sentences=sentences)
+    sentences.rawsFromPath('lee_background.cor')
+    
+    
+    
+    #model = gensim.models.Word2Vec(sentences=sentences)
     
     journal.O('Main end')
     

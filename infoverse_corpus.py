@@ -11,6 +11,9 @@ from gensim import utils
 #==============================================================================
 # package's constants
 #------------------------------------------------------------------------------
+_VER    = '1.00'
+
+STATES  = ['EMPTY', 'RAW DATA', 'CORPUS READY']
 
 #==============================================================================
 # package's variables
@@ -24,21 +27,14 @@ class InfvCorpus:
     #==========================================================================
     # Static variables & methods
     #--------------------------------------------------------------------------
-    journal = None   # Pointer to global journal
-    oids    = {}     # Zoznam objektov per objId     {objId: obj}
-    alas    = {}     # Zoznam objektov per alias     {alias: obj}
 
+    #==========================================================================
+    # Decorators
     #--------------------------------------------------------------------------
-    @staticmethod
-    def infoAll():
-        "Returns info about Objects"
-
-        msg = []
-        dat = {}
+    def isNotEmpty():
         
-
-        #----------------------------------------------------------------------
-        return {'res':'OK', 'msg':msg, 'dat':dat, 'obj':None}
+        
+    def isPrepared(:)
 
     #==========================================================================
     # Constructor & utilities
@@ -55,7 +51,10 @@ class InfvCorpus:
         #----------------------------------------------------------------------
         # datove polozky triedy
         #----------------------------------------------------------------------
-        self.name    = name  # Unique object Id
+        self.name    = name       # Unique object Id
+        self.state   = STATES[0]  # State of the corpus
+        self.raws    = []         # List of raw data to be preprocessed
+        self.corpus  = []         # Preprocessed corpus
         
         #----------------------------------------------------------------------
         # Update zoznamov a indexov
@@ -93,6 +92,48 @@ class InfvCorpus:
 
         return {'res':'OK', 'msg':['InfvCorpus.info()'], 'dat':dat, 'obj':self}
 
+    #--------------------------------------------------------------------------
+    def clear(self):
+        "Clear the corpus"
+        
+        self.journal.I(f"{self.name}.clear:")
+        
+        self.raws.  clear()
+        self.corpus.clear()
+        
+        self.state = STATES[0]
+        
+        self.journal.O()
+        
+    #==========================================================================
+    # Raw data API
+    #--------------------------------------------------------------------------
+    def rawsFromPath(self, path):
+        "Reads raw data from path"
+        
+        self.journal.I(f"{self.name}.rawsFromPath: path = '{datapath}'")
+        
+        #----------------------------------------------------------------------
+        # Clear the corpus
+        #----------------------------------------------------------------------
+        self.clear()
+        
+        #----------------------------------------------------------------------
+        # Load raws from the path
+        #----------------------------------------------------------------------
+        corpus_path = datapath('lee_background.cor')
+        
+        for line in open(corpus_path):
+            
+            self.raws.append(line)
+            
+        self.state = STATES[1]
+        
+        #----------------------------------------------------------------------
+        self.journal.O(f"{self.name}.rawsFromPath: {len(self.raws)} lines was loaded")
+
+    #--------------------------------------------------------------------------
+
     #==========================================================================
     # API
     #--------------------------------------------------------------------------
@@ -108,7 +149,7 @@ class InfvCorpus:
         return toRet
 
 #------------------------------------------------------------------------------
-print('InfvCorpus ver 0.01')
+print(f"InfvCorpus ver {_VER}")
 
 #==============================================================================
 #                              END OF FILE
